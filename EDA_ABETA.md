@@ -1035,7 +1035,7 @@ The gene expression data provided in ADNI contains information  about gene locus
 
 
 
-## 1. After data cleaning and merging, the first question we ask is: is amyloid beta level distribution bimodal in the data we work with? In addition, are the two classes that we are going to classify balanced? 
+## 1) After data cleaning and merging, the first question we ask is: is amyloid beta level distribution bimodal in the data we work with? In addition, are the two classes that we are going to classify balanced? 
 
 Fig1 addresses this question, showing bimodal distribution in both the original dream data and the merged table and well-balanced data .
 
@@ -1047,7 +1047,7 @@ Fig1 addresses this question, showing bimodal distribution in both the original 
 ![png](EDA_ABETA_files/EDA_ABETA_12_0.png)
 
 
-## 2. Is there any correlation/difference in the two classes with regard to age, apo4 level, MMSE score, and year of collection? 
+## 2) Is there any correlation/difference in the two classes with regard to age, apo4 level, MMSE score, and year of collection? 
 
 Fig2 addresses these questions. The Age of patients in class 0 are more concentrated around 75 compared to class 1 (Fig2a). The year of collection of patient samples in class 0 are more spread out than in class 1 (Fig2d). The Apoe4 level in class 0 is much more concentrated near 0, whereas class 1 shows more variation in both directions (Fig2b). When comparing Apoe4 level with ABETA level, there is a clear negative correlation between the two (Fig2f). The MMSE score distribution in class 0 is lower than in class 1 (Fig2c). The scatterplot comparing ABETA level vs MMSE score (Fig2e) showed similar trend, implying high levels of beta-amyloid might correlate with lower cognition. 
 
@@ -1060,7 +1060,7 @@ Fig2 addresses these questions. The Age of patients in class 0 are more concentr
 ![png](EDA_ABETA_files/EDA_ABETA_14_0.png)
 
 
-## 3. How does high level look of gene expression profile differ between the two classes? 
+## 3) How does high level look of gene expression profile differ between the two classes? 
 
 To address this question, we made a heatmap plot with each row correspond to a patient sample with class label on the side, each column correspond to a gene (We included 100 random genes in the plot for illustration purposes). If the gene expression profile of the two classes are distinctly different, we would expect the heatmap clustering on the y-axis (class bar on the left side of the heatmap) be very well separated between the two classes (red vs blue). The heatmap suggests the gene expression profiles between the two classes are not distinctly different based on this limited subset of genes. However, some of the samples do cluster close, showing thick red/blue class bars on the left, suggesting there might be potential that gene expression profile can help separate the two classes.
 
