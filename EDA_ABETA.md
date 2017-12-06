@@ -1,6 +1,7 @@
 ---
 title: Check distribution of amyloid-beta 42 level (ABETA) and class (SAGE.Q2)
 notebook: EDA_ABETA.ipynb
+nav_include: 1
 ---
 
 ## Contents
