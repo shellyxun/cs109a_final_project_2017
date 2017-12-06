@@ -17,146 +17,14 @@ nav_include: 1
 
 
 
-
-
-
-<div>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>1</th>
-      <th>2</th>
-      <th>3</th>
-      <th>4</th>
-      <th>5</th>
-      <th>6</th>
-      <th>7</th>
-      <th>8</th>
-      <th>9</th>
-      <th>10</th>
-      <th>...</th>
-      <th>738</th>
-      <th>739</th>
-      <th>740</th>
-      <th>741</th>
-      <th>742</th>
-      <th>743</th>
-      <th>744</th>
-      <th>745</th>
-      <th>746</th>
-      <th>747</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>count</th>
-      <td>43789</td>
-      <td>48158</td>
-      <td>49394.000</td>
-      <td>49394.000</td>
-      <td>49394.00</td>
-      <td>49394.000</td>
-      <td>49394.000</td>
-      <td>49394.000</td>
-      <td>49394.000</td>
-      <td>49394.000</td>
-      <td>...</td>
-      <td>49394.000</td>
-      <td>49394.00</td>
-      <td>49394.000</td>
-      <td>49394.00</td>
-      <td>49394.000</td>
-      <td>49394.00</td>
-      <td>49394.00</td>
-      <td>49394.000</td>
-      <td>49394.000</td>
-      <td>49386</td>
-    </tr>
-    <tr>
-      <th>unique</th>
-      <td>18725</td>
-      <td>20093</td>
-      <td>10122.000</td>
-      <td>10181.000</td>
-      <td>10157.00</td>
-      <td>10123.000</td>
-      <td>10128.000</td>
-      <td>10099.000</td>
-      <td>10154.000</td>
-      <td>10161.000</td>
-      <td>...</td>
-      <td>10139.000</td>
-      <td>10087.00</td>
-      <td>10153.000</td>
-      <td>10118.00</td>
-      <td>10196.000</td>
-      <td>10158.00</td>
-      <td>10118.00</td>
-      <td>10122.000</td>
-      <td>10135.000</td>
-      <td>23398</td>
-    </tr>
-    <tr>
-      <th>top</th>
-      <td>LOC4763</td>
-      <td>NF1</td>
-      <td>2.269</td>
-      <td>2.129</td>
-      <td>2.27</td>
-      <td>2.288</td>
-      <td>2.293</td>
-      <td>2.377</td>
-      <td>2.191</td>
-      <td>2.481</td>
-      <td>...</td>
-      <td>2.096</td>
-      <td>2.46</td>
-      <td>2.189</td>
-      <td>2.23</td>
-      <td>2.457</td>
-      <td>2.38</td>
-      <td>2.13</td>
-      <td>2.491</td>
-      <td>2.368</td>
-      <td>{NO TARGETS}</td>
-    </tr>
-    <tr>
-      <th>freq</th>
-      <td>16</td>
-      <td>19</td>
-      <td>111.000</td>
-      <td>123.000</td>
-      <td>84.00</td>
-      <td>93.000</td>
-      <td>88.000</td>
-      <td>120.000</td>
-      <td>142.000</td>
-      <td>97.000</td>
-      <td>...</td>
-      <td>113.000</td>
-      <td>103.00</td>
-      <td>122.000</td>
-      <td>108.00</td>
-      <td>59.000</td>
-      <td>109.00</td>
-      <td>120.00</td>
-      <td>119.000</td>
-      <td>109.000</td>
-      <td>23</td>
-    </tr>
-  </tbody>
-</table>
-<p>4 rows × 747 columns</p>
-</div>
+In order to add the gene expression data to the original DREAM challenge data, the gene expression dataframe had to be cleaned and transposed first. It contains information  about gene locus, ~ 49,000 gene expression levels, gene annotation, phase, visit, year of collection etc. 
 
 
 
 
 
-```python
-file_expression.head(10)
-```
+    Overview of the gene expression dataset loaded before cleaning.
+    
 
 
 
@@ -464,235 +332,20 @@ file_expression.head(10)
 
 
 
-```python
-## Set column names
-col_names = file_expression.loc['SubjectID']
-col_names[0:2]=['LocusLink','Symbol']
-#col_names
-```
 
 
 
 
-```python
-file_expression.columns = list(col_names)
-file_expression.head()
-```
+
+
+    Gene expression dataset glance after cleaning.
+    
 
 
 
 
 
 <div>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>LocusLink</th>
-      <th>Symbol</th>
-      <th>116_S_1249</th>
-      <th>037_S_4410</th>
-      <th>006_S_4153</th>
-      <th>116_S_1232</th>
-      <th>099_S_4205</th>
-      <th>007_S_4467</th>
-      <th>128_S_0205</th>
-      <th>003_S_2374</th>
-      <th>...</th>
-      <th>022_S_2379</th>
-      <th>014_S_4668</th>
-      <th>130_S_0289</th>
-      <th>141_S_4456</th>
-      <th>009_S_2381</th>
-      <th>053_S_4557</th>
-      <th>073_S_4300</th>
-      <th>041_S_4014</th>
-      <th>007_S_0101</th>
-      <th>nan</th>
-    </tr>
-    <tr>
-      <th>0</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>Phase</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>ADNIGO</td>
-      <td>ADNI2</td>
-      <td>ADNI2</td>
-      <td>ADNIGO</td>
-      <td>ADNI2</td>
-      <td>ADNI2</td>
-      <td>ADNI2</td>
-      <td>ADNIGO</td>
-      <td>...</td>
-      <td>ADNIGO</td>
-      <td>ADNI2</td>
-      <td>ADNIGO</td>
-      <td>ADNI2</td>
-      <td>ADNIGO</td>
-      <td>ADNI2</td>
-      <td>ADNI2</td>
-      <td>ADNI2</td>
-      <td>ADNI2</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>Visit</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>m48</td>
-      <td>v03</td>
-      <td>v03</td>
-      <td>m48</td>
-      <td>v03</td>
-      <td>v03</td>
-      <td>v06</td>
-      <td>bl</td>
-      <td>...</td>
-      <td>bl</td>
-      <td>v03</td>
-      <td>m60</td>
-      <td>v03</td>
-      <td>bl</td>
-      <td>v03</td>
-      <td>v03</td>
-      <td>v03</td>
-      <td>v06</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>SubjectID</th>
-      <td>LocusLink</td>
-      <td>Symbol</td>
-      <td>116_S_1249</td>
-      <td>037_S_4410</td>
-      <td>006_S_4153</td>
-      <td>116_S_1232</td>
-      <td>099_S_4205</td>
-      <td>007_S_4467</td>
-      <td>128_S_0205</td>
-      <td>003_S_2374</td>
-      <td>...</td>
-      <td>022_S_2379</td>
-      <td>014_S_4668</td>
-      <td>130_S_0289</td>
-      <td>141_S_4456</td>
-      <td>009_S_2381</td>
-      <td>053_S_4557</td>
-      <td>073_S_4300</td>
-      <td>041_S_4014</td>
-      <td>007_S_0101</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>260/280</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>2.05</td>
-      <td>2.07</td>
-      <td>2.04</td>
-      <td>2.03</td>
-      <td>2.01</td>
-      <td>2.05</td>
-      <td>1.95</td>
-      <td>1.99</td>
-      <td>...</td>
-      <td>2.05</td>
-      <td>2.05</td>
-      <td>1.98</td>
-      <td>2.09</td>
-      <td>1.87</td>
-      <td>2.03</td>
-      <td>2.11</td>
-      <td>1.94</td>
-      <td>2.06</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>260/230</th>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0.55</td>
-      <td>1.54</td>
-      <td>2.1</td>
-      <td>1.52</td>
-      <td>1.6</td>
-      <td>1.91</td>
-      <td>1.47</td>
-      <td>2.07</td>
-      <td>...</td>
-      <td>1.9</td>
-      <td>2.05</td>
-      <td>1.65</td>
-      <td>1.56</td>
-      <td>1.45</td>
-      <td>1.33</td>
-      <td>0.27</td>
-      <td>1.72</td>
-      <td>1.35</td>
-      <td>NaN</td>
-    </tr>
-  </tbody>
-</table>
-<p>5 rows × 747 columns</p>
-</div>
-
-
-
-
-
-```python
-transformed_table = file_expression
-transformed_table = transformed_table.drop(['LocusLink','Symbol'],axis=1)
-transformed_table = transformed_table.drop(transformed_table.columns[-1:],axis=1)
-#transformed_table = transformed_table.drop(['SubjectID'])
-transformed_table = transformed_table.T
-transformed_table = transformed_table.rename(columns = {'SubjectID':'PTID'})
-transformed_table.head()
-```
-
-
-
-
-
-<div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -850,28 +503,16 @@ transformed_table.head()
 
 
 
-```python
-transformed_table.describe()
-```
+
+
+    Gene expression dataset summary after cleaning.
+    
 
 
 
 
 
 <div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -952,14 +593,14 @@ transformed_table.describe()
       <th>top</th>
       <td>ADNI2</td>
       <td>v03</td>
-      <td>018_S_2138</td>
+      <td>116_S_4209</td>
       <td>2.03</td>
       <td>1.65</td>
       <td>7.1</td>
       <td>3</td>
       <td>2011</td>
       <td>NaN</td>
-      <td>2.435</td>
+      <td>2.428</td>
       <td>...</td>
       <td>2.181</td>
       <td>2.71</td>
@@ -1005,30 +646,16 @@ transformed_table.describe()
 
 
 
-```python
-## Combine gene expression data with dream data
-dream_data = pd.read_csv('../ADNI_download/AD_Challenge_Training_Data_Clinical_Updated_7.22.2014/ADNI_Training_Q2_APOE_July22.2014.csv')
-dream_data.head()
-```
+
+
+    Dream data 2nd question training set glance.
+    
 
 
 
 
 
 <div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1119,28 +746,16 @@ dream_data.head()
 
 
 
-```python
-dream_data.describe()
-```
+
+
+    Dream data 2nd question training set summary.
+    
 
 
 
 
 
 <div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1254,19 +869,6 @@ data_common.head()
 
 
 <div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
