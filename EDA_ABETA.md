@@ -17,6 +17,7 @@ nav_include: 1
 
 
 
+## 1. Data cleaning and merging
 The gene expression data provided in ADNI contains information  about gene locus, ~ 49,000 gene expression levels, gene annotation, phase, visit, year of collection etc. This dataset provides rich information but is not well formated. In order to add the gene expression data to the original DREAM challenge data, the gene expression dataframe had to be cleaned and transposed first. After the cleaning of gene expression data, the converted table merged with the Dream challenge table, generated a well formated table for following EDA. 
 
 
@@ -1034,6 +1035,7 @@ The gene expression data provided in ADNI contains information  about gene locus
 
 
 
+## 2. EDA
 
 ## 1) After data cleaning and merging, the first question we ask is: is amyloid beta level distribution bimodal in the data we work with? In addition, are the two classes that we are going to classify balanced? 
 
