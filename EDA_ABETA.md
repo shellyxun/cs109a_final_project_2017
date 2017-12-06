@@ -1,5 +1,5 @@
 ---
-title: Check distribution of amyloid-beta 42 level (ABETA) and class (SAGE.Q2)
+title: Summary
 notebook: EDA_ABETA.ipynb
 nav_include: 1
 ---
@@ -17,7 +17,7 @@ nav_include: 1
 
 
 
-In order to add the gene expression data to the original DREAM challenge data, the gene expression dataframe had to be cleaned and transposed first. It contains information  about gene locus, ~ 49,000 gene expression levels, gene annotation, phase, visit, year of collection etc. 
+The gene expression data provided in ADNI contains information  about gene locus, ~ 49,000 gene expression levels, gene annotation, phase, visit, year of collection etc. This dataset provides rich information but is not well formated. In order to add the gene expression data to the original DREAM challenge data, the gene expression dataframe had to be cleaned and transposed first. After the cleaning of gene expression data, the converted table merged with the Dream challenge table, generated a well formated table for following EDA. 
 
 
 
@@ -858,11 +858,6 @@ In order to add the gene expression data to the original DREAM challenge data, t
 
 
 
-```python
-data_common = pd.merge(left=dream_data, right=transformed_table, how='inner')
-data_common = data_common.sort_values(by='ABETA')
-data_common.head()
-```
 
 
 
@@ -1026,9 +1021,10 @@ data_common.head()
 
 
 
-```python
-data_common.shape
-```
+
+
+    The dimension for the new merged table is:
+    
 
 
 
@@ -1039,241 +1035,42 @@ data_common.shape
 
 
 
+## 1. After data cleaning and merging, the first question we ask is: is amyloid beta level distribution bimodal in the data we work with? In addition, are the two classes that we are going to classify balanced? 
 
-```python
-data_common.columns[0:30]
-```
+Fig1 addresses this question, showing bimodal distribution in both the original dream data and the merged table and well-balanced data .
 
-
-
-
-
-    Index(['RID', 'PTID', 'AGE', 'PTGENDER', 'PTEDUCAT', 'APOE4', 'MMSE', 'ABETA',
-           'SAGE.Q2', 'APOE Genotype', 'Phase', 'Visit', '260/280', '260/230',
-           'RIN', 'Affy Plate', 'YearofCollection', 'ProbeSet', '11715100_at',
-           '11715101_s_at', '11715102_x_at', '11715103_x_at', '11715104_s_at',
-           '11715105_at', '11715106_x_at', '11715107_s_at', '11715108_x_at',
-           '11715109_at', '11715110_at', '11715111_s_at'],
-          dtype='object')
-
-
-
-
-
-```python
-fig, axes = plt.subplots(ncols=2, nrows=2, figsize=(12,12))
-sns.distplot(dream_data['ABETA'], ax=axes[0,0])
-axes[0,0].set_title("Fig1a, distribution of ABETA level in dream data")
-sns.distplot(data_common['ABETA'], ax=axes[0,1])
-axes[0,1].set_title("Fig1b, distributon of ABETA level in merged data")
-sns.distplot(dream_data['SAGE.Q2'], ax=axes[1,0])
-axes[1,0].set_title("Fig1c, distribution of two classes in dream data")
-sns.distplot(data_common['SAGE.Q2'], ax=axes[1,1])
-axes[1,1].set_title("Fig1d, distribution of two classes in merged data")
-```
-
-
-
-
-
-    <matplotlib.text.Text at 0x1a0f3c7e48>
-
-
-
-
-![png](EDA_ABETA_files/EDA_ABETA_12_1.png)
-
-
-
-
-```python
-## Check gene expression profile difference by heatmap visualization
-select_data = data_common[data_common.columns[19:100]]
-select_data = select_data.convert_objects(convert_numeric=True)
-select_data['class'] = data_common['SAGE.Q2']
-exp_table = select_data.pop('class')
-exp = dict(zip(exp_table.unique(), 'rbg'))
-row_colors = exp_table.map(exp)
-g = sns.clustermap(select_data, row_colors=row_colors, z_score=1, cmap="RdBu_r", mask=select_data.isnull());
-plt.setp(g.ax_heatmap.set_yticklabels(''));
-plt.setp(g.ax_heatmap.set_xticklabels(''));
-plt.setp(g.ax_heatmap.set_xlabel('genes'));
-plt.setp(g.ax_heatmap.set_ylabel('patients'));
-plt.title("Fig3. Heatmap comparing gene expression profile across patient samples")
-#sns.clustermap(select_data, row_colors=row_colors, z_score=0, annot=False, row_cluster=False, mask=select_data.isnull())
-```
-
-
-    
-    
-      agg_filter: unknown
-      alpha: float (0.0 transparent through 1.0 opaque) 
-      animated: [True | False] 
-      axes: an :class:`~matplotlib.axes.Axes` instance 
-      backgroundcolor: any matplotlib color 
-      bbox: FancyBboxPatch prop dict 
-      clip_box: a :class:`matplotlib.transforms.Bbox` instance 
-      clip_on: [True | False] 
-      clip_path: [ (:class:`~matplotlib.path.Path`, :class:`~matplotlib.transforms.Transform`) | :class:`~matplotlib.patches.Patch` | None ] 
-      color: any matplotlib color 
-      contains: a callable function 
-      family or fontfamily or fontname or name: [FONTNAME | 'serif' | 'sans-serif' | 'cursive' | 'fantasy' | 'monospace' ] 
-      figure: a :class:`matplotlib.figure.Figure` instance 
-      fontproperties or font_properties: a :class:`matplotlib.font_manager.FontProperties` instance 
-      gid: an id string 
-      horizontalalignment or ha: [ 'center' | 'right' | 'left' ] 
-      label: string or anything printable with '%s' conversion. 
-      linespacing: float (multiple of font size) 
-      multialignment: ['left' | 'right' | 'center' ] 
-      path_effects: unknown
-      picker: [None|float|boolean|callable] 
-      position: (x,y) 
-      rasterized: [True | False | None] 
-      rotation: [ angle in degrees | 'vertical' | 'horizontal' ] 
-      rotation_mode: unknown
-      size or fontsize: [size in points | 'xx-small' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | 'xx-large' ] 
-      sketch_params: unknown
-      snap: unknown
-      stretch or fontstretch: [a numeric value in range 0-1000 | 'ultra-condensed' | 'extra-condensed' | 'condensed' | 'semi-condensed' | 'normal' | 'semi-expanded' | 'expanded' | 'extra-expanded' | 'ultra-expanded' ] 
-      style or fontstyle: [ 'normal' | 'italic' | 'oblique'] 
-      text: string or anything printable with '%s' conversion. 
-      transform: :class:`~matplotlib.transforms.Transform` instance 
-      url: a url string 
-      usetex: unknown
-      variant or fontvariant: [ 'normal' | 'small-caps' ] 
-      verticalalignment or ma or va: [ 'center' | 'top' | 'bottom' | 'baseline' ] 
-      visible: [True | False] 
-      weight or fontweight: [a numeric value in range 0-1000 | 'ultralight' | 'light' | 'normal' | 'regular' | 'book' | 'medium' | 'roman' | 'semibold' | 'demibold' | 'demi' | 'bold' | 'heavy' | 'extra bold' | 'black' ] 
-      wrap: unknown
-      x: float 
-      y: float 
-      zorder: any number 
-      agg_filter: unknown
-      alpha: float (0.0 transparent through 1.0 opaque) 
-      animated: [True | False] 
-      axes: an :class:`~matplotlib.axes.Axes` instance 
-      backgroundcolor: any matplotlib color 
-      bbox: FancyBboxPatch prop dict 
-      clip_box: a :class:`matplotlib.transforms.Bbox` instance 
-      clip_on: [True | False] 
-      clip_path: [ (:class:`~matplotlib.path.Path`, :class:`~matplotlib.transforms.Transform`) | :class:`~matplotlib.patches.Patch` | None ] 
-      color: any matplotlib color 
-      contains: a callable function 
-      family or fontfamily or fontname or name: [FONTNAME | 'serif' | 'sans-serif' | 'cursive' | 'fantasy' | 'monospace' ] 
-      figure: a :class:`matplotlib.figure.Figure` instance 
-      fontproperties or font_properties: a :class:`matplotlib.font_manager.FontProperties` instance 
-      gid: an id string 
-      horizontalalignment or ha: [ 'center' | 'right' | 'left' ] 
-      label: string or anything printable with '%s' conversion. 
-      linespacing: float (multiple of font size) 
-      multialignment: ['left' | 'right' | 'center' ] 
-      path_effects: unknown
-      picker: [None|float|boolean|callable] 
-      position: (x,y) 
-      rasterized: [True | False | None] 
-      rotation: [ angle in degrees | 'vertical' | 'horizontal' ] 
-      rotation_mode: unknown
-      size or fontsize: [size in points | 'xx-small' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | 'xx-large' ] 
-      sketch_params: unknown
-      snap: unknown
-      stretch or fontstretch: [a numeric value in range 0-1000 | 'ultra-condensed' | 'extra-condensed' | 'condensed' | 'semi-condensed' | 'normal' | 'semi-expanded' | 'expanded' | 'extra-expanded' | 'ultra-expanded' ] 
-      style or fontstyle: [ 'normal' | 'italic' | 'oblique'] 
-      text: string or anything printable with '%s' conversion. 
-      transform: :class:`~matplotlib.transforms.Transform` instance 
-      url: a url string 
-      usetex: unknown
-      variant or fontvariant: [ 'normal' | 'small-caps' ] 
-      verticalalignment or ma or va: [ 'center' | 'top' | 'bottom' | 'baseline' ] 
-      visible: [True | False] 
-      weight or fontweight: [a numeric value in range 0-1000 | 'ultralight' | 'light' | 'normal' | 'regular' | 'book' | 'medium' | 'roman' | 'semibold' | 'demibold' | 'demi' | 'bold' | 'heavy' | 'extra bold' | 'black' ] 
-      wrap: unknown
-      x: float 
-      y: float 
-      zorder: any number 
 
 
 
 
 
-    <matplotlib.text.Text at 0x1a345becc0>
+![png](EDA_ABETA_files/EDA_ABETA_12_0.png)
 
 
+## 2. Is there any correlation/difference in the two classes with regard to age, apo4 level, MMSE score, and year of collection? 
 
+Fig2 addresses these questions. The Age of patients in class 0 are more concentrated around 75 compared to class 1 (Fig2a). The year of collection of patient samples in class 0 are more spread out than in class 1 (Fig2d). The Apoe4 level in class 0 is much more concentrated near 0, whereas class 1 shows more variation in both directions (Fig2b). When comparing Apoe4 level with ABETA level, there is a clear negative correlation between the two (Fig2f). The MMSE score distribution in class 0 is lower than in class 1 (Fig2c). The scatterplot comparing ABETA level vs MMSE score (Fig2e) showed similar trend, implying high levels of beta-amyloid might correlate with lower cognition. 
 
-![png](EDA_ABETA_files/EDA_ABETA_13_2.png)
 
 
 
 
-```python
-data_common.columns[0:30]
-```
 
 
+![png](EDA_ABETA_files/EDA_ABETA_14_0.png)
 
 
+## 3. How does high level look of gene expression profile differ between the two classes? 
 
-    Index(['RID', 'PTID', 'AGE', 'PTGENDER', 'PTEDUCAT', 'APOE4', 'MMSE', 'ABETA',
-           'SAGE.Q2', 'APOE Genotype', 'Phase', 'Visit', '260/280', '260/230',
-           'RIN', 'Affy Plate', 'YearofCollection', 'ProbeSet', '11715100_at',
-           '11715101_s_at', '11715102_x_at', '11715103_x_at', '11715104_s_at',
-           '11715105_at', '11715106_x_at', '11715107_s_at', '11715108_x_at',
-           '11715109_at', '11715110_at', '11715111_s_at'],
-          dtype='object')
+To address this question, we made a heatmap plot with each row correspond to a patient sample with class label on the side, each column correspond to a gene (We included 100 random genes in the plot for illustration purposes). If the gene expression profile of the two classes are distinctly different, we would expect the heatmap clustering on the y-axis (class bar on the left side of the heatmap) be very well separated between the two classes (red vs blue). The heatmap suggests the gene expression profiles between the two classes are not distinctly different based on this limited subset of genes. However, some of the samples do cluster close, showing thick red/blue class bars on the left, suggesting there might be potential that gene expression profile can help separate the two classes.
 
 
 
 
 
-```python
-fig, axes = plt.subplots(ncols=3, nrows=2, figsize=(21,15))
-sns.violinplot(data_common['SAGE.Q2'], data_common['AGE'], ax=axes[0,0])
-axes[0,0].set_title("Fig2a, Violin plot comparing age of two classes")
 
-sns.violinplot(data_common['SAGE.Q2'], data_common['APOE4'], ax=axes[0,1])
-axes[0,1].set_title("Fig2b, Violin plot comparing Apoe4 level of two classes")
+![png](EDA_ABETA_files/EDA_ABETA_16_0.png)
 
-sns.violinplot(data_common['SAGE.Q2'], data_common['MMSE'], ax=axes[0,2])
-axes[0,2].set_title("Fig2c, Violin plot comparing MMSE score of two classes")
 
-sns.violinplot(data_common['SAGE.Q2'], data_common.YearofCollection.convert_objects(convert_numeric=True), ax=axes[1,0])
-axes[1,0].set_title("Fig2d, Violin plot comparing year of collection of two classes")
 
-axes[1,1].scatter(data_common['ABETA'],data_common['MMSE'])
-axes[1,1].set_xlabel('ABETA level')
-axes[1,1].set_ylabel('MMSE level')
-axes[1,1].set_title("Fig2e, Scatterplot comparing ABETA level vs MMSE level")
-
-sns.violinplot(data_common['APOE4'], data_common['ABETA'], ax=axes[1,2])
-axes[1,2].set_ylabel('ABETA level')
-axes[1,2].set_xlabel('APOE4 level')
-axes[1,2].set_title("Fig2f, Scatterplot comparing APOE4 level vs ABETA level")
-
-fig.tight_layout(rect=[0, 0.03, 1, 0.95])
-```
-
-
-
-![png](EDA_ABETA_files/EDA_ABETA_15_0.png)
-
-
-
-
-```python
-
-```
-
-
-
-
-```python
-
-```
-
-
-
-
-```python
-
-```
 
