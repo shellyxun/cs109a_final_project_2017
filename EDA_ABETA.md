@@ -1,80 +1,25 @@
 ---
-title: EDA for beta amyloid
+title: Check distribution of amyloid-beta 42 level (ABETA) and class (SAGE.Q2)
 notebook: EDA_ABETA.ipynb
-nav_include: 1
 ---
 
 ## Contents
 {:.no_toc}
-* Data cleaning and exploration:
-In order to add the gene expression data to the original DREAM challenge data, the gene expression dataframe had to be cleaned and transposed first. It contains information  about gene locus, ~ 49,000 gene expression levels, gene annotation, phase, visit, year of collection etc. This dataframe was then merged by corresponding patient IDs to the DREAM challenge table containing beta-amyloid levels, age, MMSE scores, etc.. This yields combined data for 130 subjects. The outcome variables for this part of the study are the beta-amyloid levels (quantitative) and the SAGE.Q2 class (categorical). SAGE.Q2 is a classification label of amyloid-beta level, where amyloid-beta 42 < 192pg/ul is 1 and amyloid-beta 42 > 192pg/ul is 0.
-
+*  
 {: toc}
 
 
 
-```python
-import warnings
-warnings.filterwarnings('ignore')
-
-import numpy as np
-import pandas as pd
-import matplotlib
-import matplotlib.pyplot as plt
-import sklearn.metrics as metrics
-from scipy import stats
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import GridSearchCV
-from sklearn.model_selection import train_test_split
-
-from sklearn.decomposition import PCA
-from sklearn.linear_model import LinearRegression
-from sklearn.linear_model import Ridge
-from sklearn.linear_model import RidgeCV
-from sklearn.linear_model import LassoCV
-from sklearn.linear_model import ElasticNetCV
-from sklearn.linear_model import ElasticNet
-from sklearn.utils import resample
-from sklearn.model_selection import cross_val_score
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import r2_score
-from sklearn.ensemble import GradientBoostingRegressor
-from scipy.stats import pearsonr
-from sklearn.gaussian_process import GaussianProcessRegressor as GPR
-
-import seaborn.apionly as sns
-sns.set_context("poster")
-from IPython.display import display
-matplotlib.style.use('ggplot')
-%matplotlib inline
-```
 
 
 
 
-```python
-file_expression = pd.read_csv("../ADNI_download/ADNI_Gene_Expression_Profile/ADNI_Gene_Expression_Profile.csv",header=None, index_col=0) #, dtype={'INDEX':str})
-file_expression.describe()
-```
 
 
 
 
 
 <div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -209,7 +154,7 @@ file_expression.describe()
 
 
 ```python
-file_expression.head(20)
+file_expression.head(10)
 ```
 
 
@@ -217,19 +162,6 @@ file_expression.head(20)
 
 
 <div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -522,249 +454,9 @@ file_expression.head(20)
       <td>2.661</td>
       <td>[HIST1H3G] histone cluster 1  H3g</td>
     </tr>
-    <tr>
-      <th>11715101_s_at</th>
-      <td>LOC8355</td>
-      <td>HIST1H3G</td>
-      <td>2.624</td>
-      <td>2.416</td>
-      <td>2.322</td>
-      <td>2.5</td>
-      <td>2.395</td>
-      <td>2.309</td>
-      <td>2.451</td>
-      <td>2.403</td>
-      <td>...</td>
-      <td>2.53</td>
-      <td>2.513</td>
-      <td>2.754</td>
-      <td>2.559</td>
-      <td>2.277</td>
-      <td>2.466</td>
-      <td>2.607</td>
-      <td>2.569</td>
-      <td>2.679</td>
-      <td>[HIST1H3G] histone cluster 1  H3g</td>
-    </tr>
-    <tr>
-      <th>11715102_x_at</th>
-      <td>LOC8355</td>
-      <td>HIST1H3G</td>
-      <td>1.873</td>
-      <td>1.884</td>
-      <td>1.999</td>
-      <td>1.851</td>
-      <td>2.08</td>
-      <td>1.997</td>
-      <td>1.539</td>
-      <td>1.926</td>
-      <td>...</td>
-      <td>2.057</td>
-      <td>2.4</td>
-      <td>2.247</td>
-      <td>1.939</td>
-      <td>2.107</td>
-      <td>2.137</td>
-      <td>2.075</td>
-      <td>2.147</td>
-      <td>2.028</td>
-      <td>[HIST1H3G] histone cluster 1  H3g</td>
-    </tr>
-    <tr>
-      <th>11715103_x_at</th>
-      <td>LOC126282</td>
-      <td>TNFAIP8L1</td>
-      <td>2.92</td>
-      <td>2.668</td>
-      <td>3.634</td>
-      <td>3.632</td>
-      <td>3.278</td>
-      <td>3.578</td>
-      <td>3.362</td>
-      <td>3.371</td>
-      <td>...</td>
-      <td>3.509</td>
-      <td>4.134</td>
-      <td>3.515</td>
-      <td>3.707</td>
-      <td>3.819</td>
-      <td>3.541</td>
-      <td>3.496</td>
-      <td>4.037</td>
-      <td>3.285</td>
-      <td>[TNFAIP8L1] Tumor necrosis factor  alpha-induc...</td>
-    </tr>
-    <tr>
-      <th>11715104_s_at</th>
-      <td>LOC92736</td>
-      <td>OTOP2</td>
-      <td>2.147</td>
-      <td>2.156</td>
-      <td>2.516</td>
-      <td>2.283</td>
-      <td>2.251</td>
-      <td>2.235</td>
-      <td>1.992</td>
-      <td>2.407</td>
-      <td>...</td>
-      <td>2.18</td>
-      <td>2.576</td>
-      <td>2.146</td>
-      <td>2.228</td>
-      <td>2.588</td>
-      <td>2.256</td>
-      <td>2.098</td>
-      <td>2.376</td>
-      <td>2.333</td>
-      <td>[OTOP2] Otopetrin 2</td>
-    </tr>
-    <tr>
-      <th>11715105_at</th>
-      <td>LOC284099</td>
-      <td>C17ORF78</td>
-      <td>2.268</td>
-      <td>2.13</td>
-      <td>1.957</td>
-      <td>2.347</td>
-      <td>2.154</td>
-      <td>2.055</td>
-      <td>2.323</td>
-      <td>2.084</td>
-      <td>...</td>
-      <td>2.067</td>
-      <td>2.217</td>
-      <td>2.258</td>
-      <td>2.261</td>
-      <td>2.201</td>
-      <td>2.205</td>
-      <td>2.161</td>
-      <td>2.13</td>
-      <td>2.074</td>
-      <td>[C17orf78] Chromosome 17 open reading frame 78</td>
-    </tr>
-    <tr>
-      <th>11715106_x_at</th>
-      <td>NaN</td>
-      <td>CTAGE6 || CTAGE15</td>
-      <td>2.432</td>
-      <td>2.27</td>
-      <td>2.333</td>
-      <td>2.258</td>
-      <td>2.334</td>
-      <td>2.45</td>
-      <td>2.166</td>
-      <td>2.397</td>
-      <td>...</td>
-      <td>2.451</td>
-      <td>2.742</td>
-      <td>2.361</td>
-      <td>2.191</td>
-      <td>2.531</td>
-      <td>2.737</td>
-      <td>2.439</td>
-      <td>2.585</td>
-      <td>2.854</td>
-      <td>[CTAGE6 || CTAGE15] {Matches 2 Loci} CTAGE fam...</td>
-    </tr>
-    <tr>
-      <th>11715107_s_at</th>
-      <td>NaN</td>
-      <td>F8A2 || F8A3 || F8A1</td>
-      <td>4.6</td>
-      <td>4.547</td>
-      <td>4.442</td>
-      <td>4.608</td>
-      <td>4.536</td>
-      <td>4.805</td>
-      <td>4.587</td>
-      <td>4.555</td>
-      <td>...</td>
-      <td>5.008</td>
-      <td>5.077</td>
-      <td>4.94</td>
-      <td>4.593</td>
-      <td>4.455</td>
-      <td>4.725</td>
-      <td>4.981</td>
-      <td>5.005</td>
-      <td>5.009</td>
-      <td>[F8A2 || F8A3 || F8A1] {Matches 3 Loci} coagul...</td>
-    </tr>
-    <tr>
-      <th>11715108_x_at</th>
-      <td>LOC285501</td>
-      <td>LINC01098</td>
-      <td>2.771</td>
-      <td>2.363</td>
-      <td>2.544</td>
-      <td>2.233</td>
-      <td>2.546</td>
-      <td>2.576</td>
-      <td>2.517</td>
-      <td>2.422</td>
-      <td>...</td>
-      <td>2.314</td>
-      <td>2.905</td>
-      <td>2.426</td>
-      <td>2.635</td>
-      <td>2.335</td>
-      <td>2.078</td>
-      <td>2.394</td>
-      <td>2.396</td>
-      <td>2.445</td>
-      <td>[LINC01098] long intergenic non-protein coding...</td>
-    </tr>
-    <tr>
-      <th>11715109_at</th>
-      <td>LOC344658</td>
-      <td>SAMD7</td>
-      <td>2.931</td>
-      <td>2.548</td>
-      <td>2.814</td>
-      <td>3.156</td>
-      <td>2.864</td>
-      <td>3.043</td>
-      <td>2.731</td>
-      <td>2.863</td>
-      <td>...</td>
-      <td>2.565</td>
-      <td>2.96</td>
-      <td>2.551</td>
-      <td>2.785</td>
-      <td>2.949</td>
-      <td>2.863</td>
-      <td>2.775</td>
-      <td>2.491</td>
-      <td>2.837</td>
-      <td>[SAMD7] sterile alpha motif domain containing 7</td>
-    </tr>
-    <tr>
-      <th>11715110_at</th>
-      <td>LOC645432</td>
-      <td>ARRDC5</td>
-      <td>5.36</td>
-      <td>5.031</td>
-      <td>5.349</td>
-      <td>5.865</td>
-      <td>5.111</td>
-      <td>5.027</td>
-      <td>6.195</td>
-      <td>4.91</td>
-      <td>...</td>
-      <td>5.404</td>
-      <td>6.034</td>
-      <td>4.55</td>
-      <td>5.924</td>
-      <td>5.609</td>
-      <td>4.879</td>
-      <td>5.279</td>
-      <td>5.961</td>
-      <td>5.437</td>
-      <td>[ARRDC5] arrestin domain containing 5</td>
-    </tr>
   </tbody>
 </table>
-<p>20 rows × 747 columns</p>
+<p>10 rows × 747 columns</p>
 </div>
 
 
@@ -775,76 +467,8 @@ file_expression.head(20)
 ## Set column names
 col_names = file_expression.loc['SubjectID']
 col_names[0:2]=['LocusLink','Symbol']
-col_names
+#col_names
 ```
-
-
-
-
-
-    1       LocusLink
-    2          Symbol
-    3      116_S_1249
-    4      037_S_4410
-    5      006_S_4153
-    6      116_S_1232
-    7      099_S_4205
-    8      007_S_4467
-    9      128_S_0205
-    10     003_S_2374
-    11     036_S_4491
-    12     098_S_4059
-    13     031_S_2018
-    14     002_S_4654
-    15     019_S_4285
-    16     141_S_4426
-    17     067_S_4072
-    18     037_S_4308
-    19     041_S_4200
-    20     128_S_0200
-    21     129_S_4220
-    22     018_S_4313
-    23     067_S_0257
-    24     029_S_1218
-    25     141_S_4053
-    26     136_S_4408
-    27     021_S_2142
-    28     114_S_4404
-    29     116_S_4167
-    30     116_S_4209
-              ...    
-    718    131_S_0384
-    719    135_S_4309
-    720    129_S_4369
-    721    137_S_0686
-    722    128_S_4571
-    723    099_S_2063
-    724    011_S_4120
-    725    041_S_0125
-    726    053_S_2357
-    727    137_S_0973
-    728    021_S_0984
-    729    027_S_0116
-    730    052_S_0951
-    731    014_S_4401
-    732    036_S_4562
-    733    137_S_0459
-    734    018_S_4696
-    735    023_S_4164
-    736    128_S_2130
-    737    082_S_4339
-    738    022_S_2379
-    739    014_S_4668
-    740    130_S_0289
-    741    141_S_4456
-    742    009_S_2381
-    743    053_S_4557
-    744    073_S_4300
-    745    041_S_4014
-    746    007_S_0101
-    747           NaN
-    Name: SubjectID, Length: 747, dtype: object
-
 
 
 
@@ -859,19 +483,6 @@ file_expression.head()
 
 
 <div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
-
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
