@@ -1,5 +1,5 @@
 ---
-title: Learning about Alzheimer’s disease from ADNI dataset
+title: Clinical Prediction from the Alzheimer's Disease Neuroimaging Initiative (ADNI) dataset
 ---
 
 CS109a, Final Project, Dec, 2017
