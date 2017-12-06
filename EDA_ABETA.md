@@ -1,12 +1,14 @@
 ---
-title: Check distribution of amyloid-beta 42 level (ABETA) and class (SAGE.Q2)
+title: EDA for beta amyloid
 notebook: EDA_ABETA.ipynb
 nav_include: 1
 ---
 
 ## Contents
 {:.no_toc}
-*  
+* Data cleaning and exploration:
+In order to add the gene expression data to the original DREAM challenge data, the gene expression dataframe had to be cleaned and transposed first. It contains information  about gene locus, ~ 49,000 gene expression levels, gene annotation, phase, visit, year of collection etc. This dataframe was then merged by corresponding patient IDs to the DREAM challenge table containing beta-amyloid levels, age, MMSE scores, etc.. This yields combined data for 130 subjects. The outcome variables for this part of the study are the beta-amyloid levels (quantitative) and the SAGE.Q2 class (categorical). SAGE.Q2 is a classification label of amyloid-beta level, where amyloid-beta 42 < 192pg/ul is 1 and amyloid-beta 42 > 192pg/ul is 0.
+
 {: toc}
 
 
