@@ -1,6 +1,5 @@
 ---
-title: Project Overview
-notebook: index.ipynb
+title: Clinical Predictions from the Alzheimer's Disease Neuroimaging Initiative (ADNI) dataset
 ---
 
 ## Contents
