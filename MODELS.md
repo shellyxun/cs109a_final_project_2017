@@ -122,7 +122,7 @@ As an alternative to regularization, we try to determine the optimal number of P
 ![png](MODELS_files/MODELS_18_1.png)
 
 
-Based on our cross-validation results, including the first 20 principal components yields the best test R2 score. This is also illustrated in the figure above. The test R2 score of this unregularized model with 20 PCs is comparable to the Ridge regression model on all 197 PCs. Further regularization does not improve this model (data not shown).
+Based on our cross-validation results, including the first 20 principal components yields the best test R2 score. Adding more principal components to the model leads to higher variance. This is also illustrated in the figure above. The test R2 score of this unregularized model with 20 PCs is comparable to the Ridge regression model on all 197 PCs. Further regularization does not improve this model (data not shown).
 
 ## Step-wise feature selection based on cross-validation score
   
@@ -150,8 +150,9 @@ In lieu of PCA, we also try dimensionality reduction by step-wise feature select
 ![png](MODELS_files/MODELS_22_1.png)
 
 
-The graph shows that the bias/variance trade-off is optimal for a model with 5 predictors where the R2 score on the validation set is highest. Fewer predictors lead to higher bias, more predictors to higher variance. This simple linear regression model with only 5 predictors and no regularization achieves a similar performance as the PCA models. We next check if regularization (Ridge Regularization with Cross-validation) improves this model further.
-We also identified 5 predictors that are helpful in predicting the mental state. Of these PTEDUCAT is a demographic confounding variable that affects the MMSE but not the dementia or AD diagnosis. The other 4 features, however, are all anatomical features from brain imaging and are prime candidates to use in the diagnosis of AD in the future.
+The graph shows that the bias/variance trade-off is optimal for a model with 5 predictors where the R2 score on the validation set is highest. Fewer predictors lead to higher bias, more predictors to higher variance. This simple linear regression model with only 5 predictors and no regularization achieves a similar performance as the PCA models. We next check if regularization (Ridge Regularization with Cross-validation) improves this model further.  
+We also identified 5 predictors that are helpful in predicting the mental state. Of these PTEDUCAT is a demographic confounding variable that affects the MMSE but not the dementia or AD diagnosis. The other 4 features, however, are all anatomical features from brain imaging and are prime candidates to use in the diagnosis of AD in the future. 
+
 
 
 
@@ -191,10 +192,10 @@ Ensemble methods like Random Forest Regression or Gradient Boosting are another 
 
 
     Random Forest Regressor with all predictors : 
-    R2 score on training set:  0.796739832447
-    R2 score on validation set:  0.240607085902
-    Pearson's correlation coefficient between estimate and ground truth(test set) 0.497885936163
-    Concordance correlation coefficient between estimate and ground truth(test set) 0.351548345382
+    R2 score on training set:  0.795066847672
+    R2 score on validation set:  0.236115394044
+    Pearson's correlation coefficient between estimate and ground truth(test set) 0.491611693098
+    Concordance correlation coefficient between estimate and ground truth(test set) 0.350110313699
 
 
 At least for the limited set of hyper-parameters we tested, the random forest model does not perform as well as our previous models.
@@ -208,11 +209,11 @@ We then tried a Gradient Boosting Regressor for our prediction using crossvalida
 
 
     GradientBoostingRegressor(alpha=0.9, criterion='friedman_mse', init=None,
-                 learning_rate=0.1, loss='ls', max_depth=4, max_features=None,
+                 learning_rate=0.1, loss='ls', max_depth=3, max_features=None,
                  max_leaf_nodes=None, min_impurity_decrease=0.0,
                  min_impurity_split=None, min_samples_leaf=1,
                  min_samples_split=2, min_weight_fraction_leaf=0.0,
-                 n_estimators=100, presort='auto', random_state=None,
+                 n_estimators=50, presort='auto', random_state=None,
                  subsample=1.0, verbose=0, warm_start=False)
 
 
@@ -221,10 +222,10 @@ We then tried a Gradient Boosting Regressor for our prediction using crossvalida
 
 
     gradient boosting regressor with all predictors : 
-    R2 score on training set:  0.996073175562
-    R2 score on validation set:  0.289511344235
-    Pearson's correlation coefficient between estimate and ground truth(test set) 0.538660917627
-    Concordance correlation coefficient between estimate and ground truth(test set) 0.458527158448
+    R2 score on training set:  0.996273889194
+    R2 score on validation set:  0.278239378459
+    Pearson's correlation coefficient between estimate and ground truth(test set) 0.528213158109
+    Concordance correlation coefficient between estimate and ground truth(test set) 0.447473718615
 
 
 
