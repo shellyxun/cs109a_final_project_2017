@@ -150,8 +150,8 @@ In lieu of PCA, we also try dimensionality reduction by step-wise feature select
 ![png](MODELS_files/MODELS_22_1.png)
 
 
-The graph shows that the bias/variance trade-off is optimal for a model with 5 predictors where the R2 score on the validation set is highest. This simple linear regression model with only 5 predictors and no regularization achieves a similar performance as the PCA models. We next check if regularization (Ridge Regularization with Cross-validation) improves this model further.
-
+The graph shows that the bias/variance trade-off is optimal for a model with 5 predictors where the R2 score on the validation set is highest. Fewer predictors lead to higher bias, more predictors to higher variance. This simple linear regression model with only 5 predictors and no regularization achieves a similar performance as the PCA models. We next check if regularization (Ridge Regularization with Cross-validation) improves this model further.
+We also identified 5 predictors that are helpful in predicting the mental state. Of these PTEDUCAT is a demographic confounding variable that affects the MMSE but not the dementia or AD diagnosis. The other 4 features, however, are all anatomical features from brain imaging and are prime candidates to use in the diagnosis of AD in the future.
 
 
 
