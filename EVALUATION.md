@@ -64,7 +64,7 @@ To evaluate our models, we used 3 different metrics: R2 score, Pearson's correla
     </tr>
     <tr>
       <th>1</th>
-      <td>linear regression on 197 PCs</td>
+      <td>linear regression with 197 PCs</td>
       <td>0.607145</td>
       <td>0.146130</td>
       <td>0.462699</td>
@@ -104,7 +104,7 @@ To evaluate our models, we used 3 different metrics: R2 score, Pearson's correla
     </tr>
     <tr>
       <th>6</th>
-      <td>linear regression model with Ridge regularizat...</td>
+      <td>ridge regression model with 5 predictors</td>
       <td>0.346355</td>
       <td>0.267639</td>
       <td>0.522654</td>
