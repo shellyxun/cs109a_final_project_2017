@@ -122,7 +122,7 @@ As an alternative to regularization, we try to determine the optimal number of P
 ![png](MODELS_files/MODELS_18_1.png)
 
 
-Based on our cross-validation results, including the first 5 principal components yields the best test R2 score. This is also illustrated in the figure above. The test R2 score of this unregularized model with 20 PCs is comparable to the Ridge regression model on all 197 PCs. Further regularization does not improve this model (data not shown).
+Based on our cross-validation results, including the first 20 principal components yields the best test R2 score. This is also illustrated in the figure above. The test R2 score of this unregularized model with 20 PCs is comparable to the Ridge regression model on all 197 PCs. Further regularization does not improve this model (data not shown).
 
 ## Step-wise feature selection based on cross-validation score
   
