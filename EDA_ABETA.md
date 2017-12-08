@@ -1,5 +1,5 @@
 ---
-title: Combining Dream Challenge data with gene expression profile of patients - EDA
+title: EDA of beta-amyloid and gene expression
 notebook: EDA_ABETA.ipynb
 nav_include: 1
 ---
